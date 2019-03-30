@@ -70,7 +70,10 @@ export default Component.extend({
     closeIntent: function() {
       if (this.get('isDestroyed')) return;
       if (this.isHovering()) {
-        return this.run.later(() => this.send('closeIntent'), 100);
+        return this.run.later(() => {
+          if (this.get('isDestroyed')) return;
+          this.send('closeIntent');
+        }, 100);
       }
       // when :hover no longer applies, close as normal
       this.send('close');
