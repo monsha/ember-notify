@@ -5,6 +5,7 @@ import { isArray } from '@ember/array';
 import Ember from 'ember';
 import layout from '../../templates/components/ember-notify/message';
 import Notify from 'ember-notify';
+import selectorMatches from '../../utils/selector-matches';
 
 const DEFAULT_MESSAGE = {};
 
@@ -62,7 +63,7 @@ export default Component.extend({
     }
   }),
   isHovering: function() {
-    return this.get('element').matches(':hover');
+    return selectorMatches(this.get('element'), ':hover');
   },
 
   actions: {
@@ -70,7 +71,10 @@ export default Component.extend({
     closeIntent: function() {
       if (this.get('isDestroyed')) return;
       if (this.isHovering()) {
-        return this.run.later(() => this.send('closeIntent'), 100);
+        return this.run.later(() => {
+          if (this.get('isDestroyed')) return;
+          this.send('closeIntent');
+        }, 100);
       }
       // when :hover no longer applies, close as normal
       this.send('close');
