@@ -5,6 +5,7 @@ import { isArray } from '@ember/array';
 import Ember from 'ember';
 import layout from '../../templates/components/ember-notify/message';
 import Notify from 'ember-notify';
+import selectorMatches from '../../utils/selector-matches';
 
 const DEFAULT_MESSAGE = {};
 
@@ -62,7 +63,7 @@ export default Component.extend({
     }
   }),
   isHovering: function() {
-    return this.get('element').matches(':hover');
+    return selectorMatches(this.get('element'), ':hover');
   },
 
   actions: {
